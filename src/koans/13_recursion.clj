@@ -1,20 +1,37 @@
 (defn is-even? [n]
   (if (= n 0)
-    __
-    (___ (is-even? (dec n)))))
+    true
+    (not (is-even? (dec n)))))
 
+;;SVS: loop creates anonimous function with 2 arguments
+;; and calls it immediately with n  and true as argument values.
+;; at eache subsequent recursive call n is decremented and acc is
+;; inverted. 
+;; 'recur' assures that this call will not consume the stack.
 (defn is-even-bigint? [n]
   (loop [n   n
          acc true]
     (if (= n 0)
-      __
+      acc
       (recur (dec n) (not acc)))))
 
+;;SVS:  Second argument in loop ('reversed') is used to accumulate returned
+;; value - it will contain reversed collection.
+;; First of the argument ('tail') would keep track of the part of the
+;; collection which is not processed yet.
 (defn recursive-reverse [coll]
-  __)
+  ( loop [tail coll
+          reversed () ]
+    (if (empty? tail)
+      reversed
+      (recur (rest tail) (cons (first tail) reversed)) )))
 
 (defn factorial [n]
-  __)
+  (loop [number n
+         result 1]
+    (if (= number 0)
+      result
+      (recur (dec number) (* number result)) )))
 
 (meditations
   "Recursion ends with a base case"
@@ -47,5 +64,6 @@
   "You can even deal with very large numbers"
   (< 1000000000000000000000000N (factorial 1000N))
 
+  ;;SVS: This computes, but trying to print out the result hangs Emacs.
   "But what happens when the machine limits you?"
   (< 1000000000000000000000000N (factorial 100003N)))
